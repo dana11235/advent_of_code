@@ -3,18 +3,13 @@ with open('day11_input.txt', 'r') as file:
     for line in file:
         initial_stones = [int(num) for num in line.strip().split()]
 
-
-def freqs(stones):
-    freqs = {}
-    for stone in stones:
-        if stone not in freqs:
-            freqs[stone] = 1
-        else:
-            freqs[stone] += 1
-    return freqs
+cache = {}
 
 
-def run_iter(start_stones):
+def run_iter(start_stones, iter):
+    if iter == 0:
+        return len(start_stones)
+
     stones = start_stones.copy()
     index = 0
     while index < len(stones):
@@ -32,24 +27,21 @@ def run_iter(start_stones):
         else:
             stones[index] *= 2024
         index += 1
-    return stones
+
+    num_stones = 0
+    next_iter = iter - 1
+    for stone in stones:
+        if stone in cache and next_iter in cache[stone]:
+            num_stones += cache[stone][next_iter]
+        else:
+            iter_stones = run_iter([stone], next_iter)
+            if stone not in cache:
+                cache[stone] = {}
+            cache[stone][next_iter] = iter_stones
+            num_stones += iter_stones
+    return num_stones
 
 
-runs = [freqs(initial_stones)]
-for i in range(74):
-    start_stones = list(runs[i].keys())
-    next_stones = run_iter(start_stones)
-    runs.append(freqs(next_stones))
-
-for stone in runs[73].keys():
-    runs[73][stone] *= len(run_iter([stone]))
-
-index = 72
-while index >= 0:
-    for stone in runs[index].keys():
-        runs[index][stone] *= runs[index + 1][stone]
-    index -= 1
-
-total_count = sum(runs[0].values())
+total_count = run_iter(initial_stones, 75)
 
 print(total_count)
