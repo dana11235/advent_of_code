@@ -1,6 +1,8 @@
 GATES = {}
 LOGIC = []
 Z_GATES = {}
+X_GATES = {}
+Y_GATES = {}
 mode = 'gates'
 with open('day24_input.txt', 'r') as file:
     for line in file:
@@ -9,6 +11,10 @@ with open('day24_input.txt', 'r') as file:
         elif mode == 'gates':
             gate, value = line.strip().split(':')
             GATES[gate] = int(value.strip())
+            if gate.startswith('x'):
+                X_GATES[int(gate[1:])] = GATES[gate]
+            elif gate.startswith('y'):
+                Y_GATES[int(gate[1:])] = GATES[gate]
         elif mode == 'logic':
             LOGIC.append(line.strip().split(' '))
 
@@ -34,10 +40,22 @@ while len(LOGIC) > 0:
             if 'z' in output:
                 Z_GATES[int(output[1:])] = GATES[output]
             LOGIC.remove(line)
-output = ''
-keys = list(Z_GATES.keys())
-keys.sort()
-for key in keys:
-    output = str(Z_GATES[key]) + output
 
-print(int(output, 2))
+
+def parse_int(gates):
+    output = ''
+    keys = list(gates.keys())
+    keys.sort()
+    for key in keys:
+        output = str(gates[key]) + output
+    return int(output, 2)
+
+
+xinput = parse_int(X_GATES)
+yinput = parse_int(Y_GATES)
+output = parse_int(Z_GATES)
+
+print('OUTPUT', output)
+# I went back and printed out the complete math problem. This won't be correct unless you use the
+# correct gates in the "fixed" file.
+print('MATH PROBLEM', xinput, '+', yinput, '=', output)
