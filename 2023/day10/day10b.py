@@ -56,6 +56,7 @@ while maze[paths[0][-1][0]][paths[0][-1][1]] != 'S':
 
 
 in_maze = 0
+# The basic intuition is that we find spaces that are in an odd number of lines
 for row_index, row in enumerate(maze):
     line_crossed = 0
     for col_index, cell in enumerate(row):
@@ -63,19 +64,24 @@ for row_index, row in enumerate(maze):
             if maze[row_index][col_index] in ['|', 'J', 'L']:
                 line_crossed += 1
         elif line_crossed % 2 == 1:
-            in_maze += 1
-            maze[row_index][col_index] = '*'
+            # It turns out that we need to do it from both directions
+            lines_remaining = 0
+            for i in range(col_index, len(maze[0])):
+                if [row_index, i] in paths[0] and maze[row_index][i] in ['|', 'J', 'L']:
+                    lines_remaining += 1
+            if lines_remaining % 2 == 1:
+                in_maze += 1
+                maze[row_index][col_index] = '*'
+            else:
+                maze[row_index][col_index] = ' '
+
         else:
             maze[row_index][col_index] = ' '
 
-# for point in paths[0]:
-#    maze[point[0]][point[1]] = 'X'
+for point in paths[0]:
+    maze[point[0]][point[1]] = 'X'
 
 for row in maze:
     print(''.join(row))
 
-# I noticed that there were a few pieces that shouldn't have been in the maze.
-# When I subtracted these manually, my answer was correct. I'm going to work on a better
-# heuristic that doesn't require manual subtraction.
-a = '******************'
-print(in_maze - len(a) - 1)
+print(in_maze)
