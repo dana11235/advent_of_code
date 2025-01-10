@@ -108,11 +108,14 @@ def n_choose_k(n, k):
 
 
 print('number', n_choose_k(num_nodes, 2))
+
 FREQS = {}
 n = 0
 last_time = time.time()
 for index in range(num_nodes - 1):
-    for index2 in range(index + 1, num_nodes):
+    # You only need to use a sampling of nodes rather than all nodes.  This won't always work,
+    # but if you run it a few times, it will return the answer.
+    for index2 in range(index + 1, round(num_nodes / 100)):
         n += 1
         # Some quick status info, because this code runs pretty slowly
         if n % 1000 == 0:
