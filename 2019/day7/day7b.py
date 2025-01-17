@@ -19,12 +19,12 @@ for combo in itertools.permutations(PHASE_SETTINGS, 5):
     # Run the first iteration from scratch
     for i, input in enumerate(combo):
         states.append(run_program(OPS.copy(), [input, power], 0))
-        power = states[i][1]
+        power = states[i][1][0]
     # Now, continue to run until they have all halted (they will all halt at the same time)
     while not states[0][0]:
         for i, input in enumerate(combo):
             states[i] = run_program(states[i][3], [power], states[i][2])
-            power = states[i][1]
+            power = states[i][1][0]
 
     if power > max_power:
         max_power = power
