@@ -133,7 +133,10 @@ def convert_to_dict(opcodes):
 def run_program(opcodes, input, index, rel_base=0):
     REL_BASE['val'] = rel_base
     num_opcodes = len(opcodes)
-    OPS = {i: opcodes[i] for i in range(num_opcodes)}
+    if type(opcodes) == list:
+        OPS = {i: opcodes[i] for i in range(num_opcodes)}
+    else:
+        OPS = opcodes
     INPUT['vals'] = input
     INPUT['index'] = 0
     OUTPUT['vals'] = []
@@ -142,10 +145,10 @@ def run_program(opcodes, input, index, rel_base=0):
         modes = {'a': a_mode, 'b': b_mode, 'c': c_mode}
         # We halt if we are at a stopping point
         if opcode == 99:
-            return [True, OUTPUT['vals'], index, OPS]
+            return [True, OUTPUT['vals'], index, OPS, REL_BASE['val']]
         # If the program requires an input, we return the output and current state
         elif opcode == 3 and INPUT['index'] > len(INPUT['vals']) - 1:
-            return [False, OUTPUT['vals'], index, OPS]
+            return [False, OUTPUT['vals'], index, OPS, REL_BASE['val']]
         else:
             operation = OPCODES[opcode]
             index = operation(index, modes, OPS)
