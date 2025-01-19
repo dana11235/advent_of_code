@@ -16,7 +16,7 @@ max_power = 0
 for combo in itertools.permutations(PHASE_SETTINGS, 5):
     power = 0
     for input in combo:
-        _, power, _, _ = run_program(OPS.copy(), [input, power], 0)
+        _, power, _, _, _ = run_program(OPS.copy(), [input, power], 0)
         power = power[0]
     if power > max_power:
         max_power = power

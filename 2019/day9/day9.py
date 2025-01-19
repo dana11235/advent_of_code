@@ -11,7 +11,7 @@ with open('day9_input.txt', 'r') as file:
         OPS += [int(code) for code in line.split(',')]
 
 
-_, output, _, _ = run_program(OPS.copy(), [1], 0)
+_, output, _, _, _ = run_program(OPS.copy(), [1], 0)
 print('part a', output[0])
-_, output, _, _ = run_program(OPS.copy(), [2], 0)
+_, output, _, _, _ = run_program(OPS.copy(), [2], 0)
 print('part b', output[0])
