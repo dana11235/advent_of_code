@@ -127,9 +127,6 @@ def parse_params(value):
     return [int(value[0]), int(value[1]), int(value[2]), int(value[3:])]
 
 OPS = []
-def convert_to_dict(opcodes):
-    opcodes_dict = {}
-
 def run_program(opcodes, input, index, rel_base=0):
     REL_BASE['val'] = rel_base
     num_opcodes = len(opcodes)
