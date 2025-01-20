@@ -154,3 +154,13 @@ def run_program(opcodes, input, index, rel_base=0):
             index = operation(index, modes, OPS)
 
     return OUTPUT['vals']
+
+class IntCodeComputer:
+    def __init__(self, OPS):
+        self.OPS = OPS
+        self.index = 0
+        self.rel_base = 0
+
+    def run_step(self, input):
+        finished, output, self.index, self.OPS, self.rel_base = run_program(self.OPS, input, self.index, self.rel_base)
+        return [finished, output]
