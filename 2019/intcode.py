@@ -152,6 +152,29 @@ def run_program(opcodes, input, index, rel_base=0):
 
     return OUTPUT['vals']
 
+def from_ascii(input):
+    int_arr = []
+    for char in list(input):
+        int_arr.append(ord(char))
+    int_arr.append(10)
+    return int_arr
+
+def to_ascii(output):
+    ascii_lines = []
+    curr_line = ""
+    for num in output:
+        if num == 10:
+            ascii_lines.append(curr_line)
+            curr_line = ""
+        elif num > 128:
+            ascii_lines.append(num)
+            curr_line = ""
+        else:
+            curr_line += chr(num)
+    if len(curr_line) > 0:
+        ascii_lines.append(curr_line)
+    return ascii_lines
+
 class IntCodeComputer:
     def __init__(self, OPS):
         self.OPS = OPS
@@ -161,3 +184,17 @@ class IntCodeComputer:
     def run_step(self, input):
         finished, output, self.index, self.OPS, self.rel_base = run_program(self.OPS, input, self.index, self.rel_base)
         return [finished, output]
+
+    def run_ascii_step(self, input=None):
+        ascii_input = []
+        if input:
+            ascii_input = from_ascii(input)
+        finished, output, self.index, self.OPS, self.rel_base = run_program(self.OPS, ascii_input, self.index, self.rel_base)
+        return [finished, to_ascii(output)]
+
+    def run_ascii_steps(self, inputs):
+        ascii_input = []
+        for input in inputs:
+            ascii_input += from_ascii(input)
+        finished, output, self.index, self.OPS, self.rel_base = run_program(self.OPS, ascii_input, self.index, self.rel_base)
+        return [finished, to_ascii(output)]
